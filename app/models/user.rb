@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
 	private
 
 		def create_remember_token
+#			頭にselfをつけることによって、remember_tokenがこのメソッド内のローカル変数ではなく、Userモデルのインスタンス変数になる。
+#			これにより、Userをデータベースに保存する際に、remember_tokenもデータベース上に記録されるようになる。
 			self.remember_token = User.encrypt(User.new_remember_token)
 		end
 end

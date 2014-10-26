@@ -1,0 +1,11 @@
+<% provide(:title, 'All users') %>
+<h1>All users</h1>
+
+<%= will_paginate %>
+
+<ul class="users">
+	<%# rails側が@usersをuserオブジェクトのリストであると判断、ユーザのコレクション（usersモデルの要素）を列挙してくれる %>
+	<%= render @users %>
+</ul>
+
+<%= will_paginate %>
