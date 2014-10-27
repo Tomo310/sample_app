@@ -36,6 +36,14 @@ module SessionsHelper
 		user == current_user
 	end
 
+	def signed_in_user
+		unless signed_in?
+			store_location
+			# オプションとして、redirect先で扱うflashの:noticeキーに文字列を代入している。
+			redirect_to signin_url, notice: "Please sign in."
+		end
+	end
+
 #	@current_userをnilにして、coolieに記録されたtokenを削除
 	def sign_out
 		self.current_user = nil

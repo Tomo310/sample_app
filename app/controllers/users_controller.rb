@@ -12,6 +12,7 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
+		@microposts = @user.microposts.paginate(page: params[:page])
 	end
 
 	def new
@@ -60,14 +61,6 @@ class UsersController < ApplicationController
 
 		# Before actions
 		# 各アクションの前に実行されるメソッド
-
-		def signed_in_user
-			unless signed_in?
-				store_location
-				# オプションとして、redirect先で扱うflashの:noticeキーに文字列を代入している。
-				redirect_to signin_url, notice: "Please sign in."
-			end
-		end
 
 		def correct_user
 			@user = User.find(params[:id])

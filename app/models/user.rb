@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+	# マイクロポストを複数所有する関連付け。あるuserが破棄された場合、関連するmicropostも破棄される（dependent: :destroy）。
+	has_many :microposts, dependent: :destroy
 	has_secure_password
 	before_save { email.downcase! }
 	before_create :create_remember_token
@@ -13,6 +15,11 @@ class User < ActiveRecord::Base
 
 	def User.encrypt(token)
 		Digest::SHA1.hexdigest(token.to_s)
+	end
+
+	def feed
+		# 'id'で指定したuser_idに関連しているmicropostを全て呼び出す
+		Micropost.where("user_id = ?", id)
 	end
 
 	private
