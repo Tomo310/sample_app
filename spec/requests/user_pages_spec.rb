@@ -66,7 +66,7 @@ describe "User Pages" do
 		end
 		
 =begin
-		# 通常のFollow/Unfollowボタンの実装を行った場合に使うテスト
+		# 通常のFollow/Unfollowボタンの実装を行った場合に使うテスト（Ajaxを使った場合のテストはrelationships_controller_spec.rb参照）
 		describe "follow/unfollow buttons" do
 			let(:other_user) { FactoryGirl.create(:user) }
 			before { sign_in user }
@@ -117,6 +117,18 @@ describe "User Pages" do
 			end
 		end
 =end
+
+		describe "following/follower statistics" do
+			let(:other_user) { FactoryGirl.create(:user) }
+			before do
+				other_user.follow!(user)
+				sign_in user
+				visit user_path(user)
+			end
+
+			it { should have_link("0 following", href: following_user_path(user)) }
+			it { should have_link("1 followers", href: followers_user_path(user)) }
+		end
 	end
 
 	describe "signup page" do

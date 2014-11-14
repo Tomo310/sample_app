@@ -176,6 +176,32 @@ describe User do
     end
   end
 
+  describe "relationship associations" do
+    let(:followed_user) { FactoryGirl.create(:user) }
+    before do
+      @user.save
+      @user.follow!(followed_user)
+      @relationships = @user.relationships.to_a
+    end
+
+    it "should destroy followed user" do
+      followed_user.destroy
+      expect(@relationships).not_to be_empty
+      # 一瞬relationship.idじゃなくてrelationship.followed_idかと思ったけど、relationshipsの中身そのものが無いことを確認したいんだから前者で良かった。
+      @relationships.each do |relationship|
+        expect(Relationship.where(id: relationship.id)).to be_empty
+      end
+    end
+
+    it "should destroy follower" do
+      @user.destroy
+      expect(@relationships).not_to be_empty
+      @relationships.each do |relationship|
+        expect(Relationship.where(id: relationship.id)).to be_empty
+      end
+    end
+  end
+
   describe "following" do
     let(:other_user) { FactoryGirl.create(:user) }
     before do
